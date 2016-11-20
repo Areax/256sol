@@ -110,17 +110,9 @@ function save_a_data(data)
 		return;
 
 	str = str.substring(str.indexOf(" ")+1);
-	var temp = str.substring(0, str.indexOf(" "));
-	if(temp != 'b' || temp != "o" || temp != "s" )
-		temp = str;
-	
-	//console.log("lol" + temp);
-	if(temp == 'o' || led_c == "none")
-		led_t = 'o';
-	else if(temp == 'b')
-		led_t = 'b';
-	else 
-		led_t = 's';
+	led_t = str.substring(0, str.indexOf(" "));
+	if(led_t != '0' || led_t != "1")
+		led_t = 1;
 	
 	all_requests += led_numb + " " + color_in_hex + " " + led_t + "\n";
 	total_req++;
@@ -148,8 +140,8 @@ function saveData(err, data, response) {
 		}
 		str = str.substring(str.indexOf(" ")+1);
 		led_color[i] = str.substring(0, str.indexOf(" "));
-		/*if(led_color[i] == none)
-			arbitrary color, set type to off :)
+		if(led_color[i] == "none")
+			led_color[i] = black;
 		if(//binary search here//)
 		{
 			i--;
@@ -167,8 +159,8 @@ function saveData(err, data, response) {
 	}
 	valid_requests = (valid) + "\n" + valid_requests;
 	console.log(valid_requests);
-	
-	fs.writeFileSync("LEDchange.txt", valid_requests);
+	if(valid_requests != "")
+		fs.writeFileSync("LEDchange.txt", valid_requests);
 }
 
 function colourNameToHex(colour)

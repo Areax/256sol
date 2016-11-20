@@ -55,18 +55,13 @@ void setup() {
 
 
 void loop() {
-
-leds[10] = CRGB::Yellow;
-FastLED.show();
-
    if(Serial.available())
    {
-    leds[19] = CRGB::Yellow;
-    FastLED.show();
     int avail_bytes = Serial.available();
     byte all_bytes[avail_bytes];
     int pin_num = -1;
-    char* hex_color = '\0';
+    int hex_color[6];
+    hex_color[0] = -1;
     // 0 == off, 1 == stay, 2 == blink
     int type = -1;
     
@@ -75,48 +70,47 @@ FastLED.show();
       all_bytes[i] = Serial.read();
       if(all_bytes[i] == -1)
         pin_num = -1;
-        leds[i] = CRGB::Red;
     }
 
     if(avail_bytes == 11)
     {
       pin_num = all_bytes[0]- '0';
-      for(int i = 0; i < 7; i++)
+      for(int i = 0; i < 6; i++)
       {
         hex_color[i] = all_bytes[i+3];
+        if(hex_color[i] > 15) 
+          hex_color[i] += '0' - 'a' + 10;
       }
-      type = all_bytes[10];
+      type = all_bytes[10] - '0';
+
     }
     else if(avail_bytes == 12)
     {
       pin_num =(all_bytes[0] - '0') * 10 + (all_bytes[1] - '0');
-      for(int i = 0; i < 7; i++)
+      for(int i = 0; i < 6; i++)
       {
-        hex_color[i] = all_bytes[i+4];
+        hex_color[i] = all_bytes[i+4] - '0';
+        if(hex_color[i] > 15) 
+          hex_color[i] += '0' - 'a' + 10;
       }
-      type = all_bytes[11];
+      type = all_bytes[11] - '0';
     }
+   
 
-    //hex to integer values
-    char red[] = {hex_color[0], hex_color[1]};
-    char green[] = {hex_color[2], hex_color[3]};
-    char blue[] = {hex_color[4], hex_color[5]};
 
-    int redC = (int) strtol(red, NULL, 16);
-    int greenC = (int) strtol(green, NULL, 16);
-    int blueC = (int) strtol(blue, NULL, 16);
+
     
+    if(hex_color[0] == -1)
+      return;
+       int red = (hex_color[0] << 4) | hex_color[1];
+      int green = (hex_color[2] << 4) | hex_color[3];
+      int blue = (hex_color[4] << 4) | hex_color[5];
     
-
-    if(pin_num >= 0 && pin_num < 50)
+    if(pin_num >= 0 && pin_num < 50 && type == 1)
     {
-      leds[pin_num] = CRGB(15, 19, 200);
-      if(type == 0)
-        {
-          delay(500);
-          //leds[pin_num] = CRGB(0, 0, 0);
-        }
+      leds[pin_num] = CRGB(red, green, blue);
     }
+    else leds[pin_num] = CRGB::Black;
       
     //leds[avail_bytes] = CRGB::Purple;
 
