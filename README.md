@@ -1,6 +1,9 @@
 #256 Shades of Light
 This project was created during a Microsoft Hackathon to have a Twitter bot feed an Arduino real-time requests for changing LED lights certain colors.
 
+![img_20161119_222341428](https://cloud.githubusercontent.com/assets/17516547/21959443/50b5f326-da95-11e6-9a7b-8f8c0049f415.jpg)
+
+
 ##Introduction
 256sol was an idea created in a Hackathon for the upcoming holidays.  Without the expert knowledge of Node JS, Processing 3, or Arduino Teensy, it was a rough 12 hours, but by the end of the night, a simple prototype was created in order to have something to show at the end.  Afterwards, the project code was cleaned up and the project ended up being 100% functional after a few weeks later on.
 
